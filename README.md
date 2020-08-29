@@ -22,6 +22,8 @@ It was originally designed for use controlling the brightness of LEDs, but could
 
 It uses a single hardware timer (Timer 2 on AVR, or IntervalTimer on Teensy 3.x) on the microcontroller to generate up to 20 PWM channels.
 
+The default frequency is 60hz, which uses 20-30% of the CPU on a 16MHz ATmega328p, or 40-60% at 8MHz. 
+
 ----
 
 ## Features ##
@@ -81,11 +83,13 @@ void loop()
 ----
 ## Function Descriptions ##
 
-`SoftPWMBegin([defaultPolarity])`
+`SoftPWMBegin([defaultPolarity], [frequency])`
 
 * Initializes the library - sets up the timer and other tasks.
 * optional `defaultPolarity` allows all newly defined pins to take on this polarity.
   * Values: `SOFTPWM_NORMAL`, `SOFTPWM_INVERTED`
+* optional `frequency` lets you define the PWM frequency in hertz.
+  * Useful range: 40 to 80 at 8MHz, 40 to 160 at 16MHz.
 
 `SoftPWMSet(pin,value)`
 

@@ -51,12 +51,16 @@
  #include <WProgram.h>
 #endif
 
-#if F_CPU
+
+#ifdef F_CPU
+#ifndef SOFTPWM_FREQ 
 #define SOFTPWM_FREQ 60UL
-#define SOFTPWM_OCR (F_CPU/(8UL*256UL*SOFTPWM_FREQ))
-#else
+#endif
+uint8_t SOFTPWM_OCR = (F_CPU/(8UL*256UL*SOFTPWM_FREQ));
+#else 
 // 130 == 60 Hz (on 16 MHz part)
-#define SOFTPWM_OCR 130
+uint8_t SOFTPWM_OCR = 130;
+
 #endif
 
 volatile uint8_t _isr_softcount = 0xff;
@@ -151,7 +155,7 @@ ISR(SOFTPWM_TIMER_INTERRUPT)
 
 
 
-void SoftPWMBegin(uint8_t defaultPolarity)
+void SoftPWMBegin(uint8_t defaultPolarity, unsigned long frequency)
 {
   // We can tweak the number of PWM period by changing the prescalar
   // and the OCR - we'll default to ck/8 (CS21 set) and OCR=128.
@@ -168,6 +172,7 @@ void SoftPWMBegin(uint8_t defaultPolarity)
   Timer2.setOCR(CHANNEL_A, SOFTPWM_OCR);
   Timer2.attachInterrupt(INTERRUPT_COMPARE_MATCH_A, SoftPWM_Timer_Interrupt);
 #else
+  SOFTPWM_OCR = (F_CPU/(8UL*256UL*frequency));
   SOFTPWM_TIMER_INIT(SOFTPWM_OCR);
 #endif
 

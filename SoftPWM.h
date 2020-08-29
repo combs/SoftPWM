@@ -47,7 +47,7 @@
 
 #define ALL -1
 
-void SoftPWMBegin(uint8_t defaultPolarity = SOFTPWM_NORMAL);
+void SoftPWMBegin(uint8_t defaultPolarity = SOFTPWM_NORMAL, unsigned long frequency = 60UL);
 void SoftPWMSet(int8_t pin, uint8_t value, uint8_t hardset = 0);
 void SoftPWMSetPercent(int8_t pin, uint8_t percent, uint8_t hardset = 0);
 void SoftPWMEnd(int8_t pin);
